@@ -1,5 +1,4 @@
 from enum import Enum
-import re
 from htmlnode import LeafNode
     
 class TextType(Enum):
@@ -45,13 +44,3 @@ def text_node_to_html_node(text_node):
     
     else:
         raise ValueError("No text type selected")
-    
-#From alt text and URL for images from raw markdown text 
-def extract_markdown_images(text):
-    matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-    return matches
-
-#From anchor text and URL for links from raw markdown text 
-def extract_markdown_links(text):
-    matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-    return matches

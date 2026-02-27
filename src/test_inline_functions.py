@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
 
 
 class Testsplit_nodes_delimiter(unittest.TestCase):
@@ -92,7 +92,44 @@ class Testsplit_nodes_delimiter(unittest.TestCase):
             ],
             new_nodes,
         )
+        
+    #Test pipeline of splitting functions
+    def test_everything_mixed(self):
+        text = "Hello **bold** *ital* `code` [alt](www.boot.dev) ![image](https://i.imgur.com/zjjcJKZ.png)"
+        self.assertListEqual(
+            text_to_textnodes(text),
+            [
+                TextNode("Hello ", TextType.TEXT),
+                TextNode("bold", TextType.BOLD),
+                TextNode(" ", TextType.TEXT),
+                TextNode("ital", TextType.ITALIC),
+                TextNode(" ", TextType.TEXT),
+                TextNode("code", TextType.CODE),
+                TextNode(" ", TextType.TEXT),
+                TextNode("alt", TextType.LINK, "www.boot.dev"),
+                TextNode(" ", TextType.TEXT),
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+            ],)
+    
 
+    def test_no_markup(self):
+        text = "Hello world!"
+        self.assertListEqual(
+            text_to_textnodes(text),
+            [
+                TextNode("Hello world!", TextType.TEXT),
+            ],)
+            
+    def test_non_parsed(self):
+        text = "Here is `**not bold** and *not italic*` done"
+        self.assertListEqual(
+            text_to_textnodes(text),
+            [
+                TextNode("Here is ", TextType.TEXT),
+                TextNode("**not bold** and *not italic*", TextType.CODE),
+                TextNode(" done", TextType.TEXT),
+            ],)
+        
     
 if __name__ == "__main__":
     unittest.main()

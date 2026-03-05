@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes, markdown_to_blocks
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
 
 
 class Testsplit_nodes_delimiter(unittest.TestCase):
@@ -130,80 +130,7 @@ class Testsplit_nodes_delimiter(unittest.TestCase):
                 TextNode(" done", TextType.TEXT),
             ],)
         
-    #Tests for markdown_to_blocks
-    def test_markdown_to_blocks(self):
-        md = """
-This is **bolded** paragraph
+   
 
-This is another paragraph with _italic_ text and `code` here
-This is the same paragraph on a new line
-
-- This is a list
-- with items
-"""
-        blocks = markdown_to_blocks(md)
-        self.assertEqual(
-            blocks,
-            [
-                "This is **bolded** paragraph",
-                "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
-                "- This is a list\n- with items",
-            ],
-        )
-        
-    def test_markdown_to_blocks_newlines(self):
-        md = """
-    This is block 1
-
-
-    This is block 2
-
-
-
-    This is block 3
-    """
-        blocks = markdown_to_blocks(md)
-        self.assertEqual(
-            blocks,
-            [
-                "This is block 1",
-                "This is block 2",
-                "This is block 3",
-            ],
-        )
-    
-    def test_markdown_to_blocks_whitespace(self):
-        md = "  This is a block with leading/trailing spaces   "
-        blocks = markdown_to_blocks(md)
-        self.assertEqual(
-            blocks,
-            ["This is a block with leading/trailing spaces"]
-        )
-        
-    def test_markdown_to_blocks_mixed(self):
-        md = """
-# Heading
-
-- Item 1
-- Item 2
-
-Paragraph with
-multiple lines.
-"""
-        blocks = markdown_to_blocks(md)
-        self.assertEqual(
-            blocks,
-            [
-                "# Heading",
-                "- Item 1\n- Item 2",
-                "Paragraph with\nmultiple lines.",
-            ],
-        )
-        
-    def test_markdown_to_blocks_empty(self):
-        md = "          "
-        blocks = markdown_to_blocks(md)
-        self.assertEqual(blocks, [])
-    
 if __name__ == "__main__":
     unittest.main()

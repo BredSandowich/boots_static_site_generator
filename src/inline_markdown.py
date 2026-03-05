@@ -96,12 +96,3 @@ def text_to_textnodes(text):
     
     return nodes
 
-#Take raw markdown string and return a list of "block" strings
-def markdown_to_blocks(text):
-    blocked = text.split("\n\n")
-    new_list = []
-    for block in blocked:
-        trimmed = block.strip()
-        if trimmed != "":
-            new_list.append(trimmed)
-    return new_list

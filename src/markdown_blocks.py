@@ -84,7 +84,7 @@ def block_to_uolist(block):
     for item in lines:
         if not item.startswith("*") and not item.startswith("-"):
             raise ValueError("Invalid list item")
-        line_content = item[2:].lstrip("*").lstrip("-").strip()
+        line_content = item[2:].strip()
         line_child_nodes = text_to_children(line_content)
         list_items.append(ParentNode("li", line_child_nodes))
     

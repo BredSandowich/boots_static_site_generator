@@ -14,7 +14,7 @@ def extract_title(markdown):
     raise Exception("No H1 header found")
 
 #Function to generate a page from Markdown file
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path}to {dest_path} using {template_path}")
     
     file = open(from_path)
@@ -32,6 +32,8 @@ def generate_page(from_path, template_path, dest_path):
     page_title = extract_title(path_content)
     template_content = template_content.replace("{{ Title }}", page_title)
     template_content = template_content.replace("{{ Content }}", html)
+    template_content = template_content.replace('href="/', f'href="{basepath}')
+    template_content = template_content.replace('src="/', f'src="{basepath}')
     
     dest_directory = os.path.dirname(dest_path)
     if dest_directory != "":
@@ -42,8 +44,8 @@ def generate_page(from_path, template_path, dest_path):
     
     
     #Function to generate sub pages from Markdown file recusively
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
-    print(f"Generating subpages from {dir_path_content}to {dest_dir_path} using {template_path}")
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
+    print(f"Generating subpages from {dir_path_content} to {dest_dir_path} using {template_path}")
         
     for filepath in os.listdir(dir_path_content):
         source_path = os.path.join(dir_path_content, filepath)
@@ -52,8 +54,8 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         if os.path.isfile(source_path) and source_path.endswith(".md"):
             print(f"Generating {source_path} to {destination_path}")
             dest_path_obj = Path(destination_path).with_suffix(".html")
-            generate_page(source_path, template_path, dest_path_obj)
+            generate_page(source_path, template_path, dest_path_obj, basepath)
 
         if os.path.isdir(source_path):
             print(f"Creating directory {destination_path}")
-            generate_pages_recursive(source_path, template_path, destination_path)
+            generate_pages_recursive(source_path, template_path, destination_path, basepath)

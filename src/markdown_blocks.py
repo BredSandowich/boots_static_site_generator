@@ -1,7 +1,7 @@
 from enum import Enum
 from htmlnode import HTMLNode, ParentNode
 from inline_markdown import text_to_textnodes, text_node_to_html_node
-from textnode import TextNode
+from textnode import TextNode, TextType
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -72,7 +72,7 @@ def block_to_quote(block):
     for line in lines:
         if not line.startswith(">"):
             raise ValueError("Invalid quote block")
-        quote.append(line.lstrip(">").strip)
+        quote.append(line.lstrip(">").strip())
     content = " ".join(quote)
     
     children = text_to_children(content)
@@ -107,7 +107,7 @@ def block_to_olist(block):
 
 def block_to_code(block):
     code_content = block[4:-3]
-    node = TextNode(code_content, "text")
+    node = TextNode(code_content, TextType.TEXT)
     html_node = text_node_to_html_node(node)
     code_node = ParentNode("code", [html_node])
     
@@ -148,3 +148,5 @@ def markdown_to_html_node(markdown):
         children.append(node)
     
     return ParentNode("div", children)
+
+    
